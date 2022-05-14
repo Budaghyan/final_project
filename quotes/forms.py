@@ -14,12 +14,11 @@ class CreateQuoteForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop("request")
+        self.request = kwargs.pop("request", None)
         super().__init__(*args, **kwargs)
 
     def clean(self):
         self.cleaned_data = super().clean()
-        print(self.get_context())
         self.cleaned_data["user_id"] = self.request.user
         return self.cleaned_data
 

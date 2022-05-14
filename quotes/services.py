@@ -9,17 +9,18 @@ class QuotesScraper:
         self.url = url
         self.page_limit = page_limit
         self.current_page = 0
-        self.default_timeout = 3
+        self.default_timeout = 0.3
 
     def scrap_paginated(self):
         while self.current_page <= self.page_limit:
             self.current_page += 1
             url = self.url + f'{self.current_page}/'
             data = []
+            time.sleep(self.default_timeout)
+
             for author, quote, tags in self.scrap(url):
                 data.append((author, quote, tags))
             yield data
-            time.sleep(self.default_timeout)
 
     def scrap(self, url):
         response = requests.get(url, headers={
@@ -28,7 +29,7 @@ class QuotesScraper:
                           ' Chrome/99.0.4844.74 Safari/537.36'})
         response_html = response.text
         soup = BeautifulSoup(response_html, "html.parser")
-        content = soup.find_all('div', 'quotes')
+        content = soup.find_all('div', 'quote')
         for item in content:
             quote = item.find('span', 'text').text
             author = item.find('small', 'author').text
