@@ -14,21 +14,18 @@ class CreateQuoteForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-        super(CreateQuoteForm, self).__init__()
-        self.user = None
-        if kwargs.get("user"):
-            self.user = kwargs["user"]
+        self.request = kwargs.pop("request")
+        super().__init__(*args, **kwargs)
 
     def clean(self):
-        super().clean()
+        self.cleaned_data = super().clean()
         print(self.get_context())
-        self.cleaned_data["user_id"] = self.user
+        self.cleaned_data["user_id"] = self.request.user
         return self.cleaned_data
 
-    def save(self, commit=True):
-        self.instance.user_id = self.user
-        super().save()
-
+    def save(self):
+        self.instance.user_id = self.request.user
+        super(CreateQuoteForm, self).save()
 
 class QuoteSearchForm(forms.Form):
     category = forms.ModelChoiceField(Quotes.objects.order_by('tag'), required=False)

@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -22,13 +22,9 @@ class QuotesView(ListView):
         ).order_by("-id")
 
 
-class QuoteMixin:
-    model = Quotes
-    fields = '__all__'
-
-
-class QuoteCreateView(QuoteMixin, CreateView):
+class QuoteCreateView(View):
     template_name = "quotes/create.html"
+    form_class = CreateQuoteForm
     success_url = reverse_lazy('quotes:quotes')
 
     def get_queryset(self, **kwargs):
@@ -36,14 +32,28 @@ class QuoteCreateView(QuoteMixin, CreateView):
             "tag"
         ).order_by("-id")
 
+    def get(self, request):
+        return render(request, self.template_name, {"form": self.form_class()})
+
+    def post(self, request):
+        form = self.form_class(request.POST, request=request)
+        print(form.is_valid())
+        print(request.POST)
+        if form.is_valid():
+            form.clean()
+            form.save()
+            return redirect("quotes:quotes")
+        print(form.errors)
+        return render(request, self.template_name, {"form": form})
+
 
 @method_decorator(login_required, name='dispatch')
-class QuoteUpdateView(QuoteMixin, UpdateView):
+class QuoteUpdateView(UpdateView):
     success_url = reverse_lazy('quotes:quotes')
 
 
 @method_decorator(login_required, name='dispatch')
-class QuoteDeleteView(QuoteMixin, DeleteView):
+class QuoteDeleteView(DeleteView):
     success_url = reverse_lazy('quotes:quotes')
 # class CreateQuoteView(View):
 #     template_name = "quotes/create.html"
