@@ -16,7 +16,6 @@ class RegisterView(View):
             user = register_form.save()
             login(request, user)
             return redirect('/quotes')
-        print(register_form.errors)
 
         return render(request, 'user/register.html', {'form': register_form})
 
@@ -25,26 +24,25 @@ class RegisterView(View):
         return render(request, 'user/register.html', {'form': register_form})
 
 
-# class LoginView(View):
-#     def post(self, request):
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         print(username)
-#         print(password)
-#         user = authenticate(username=username, password=password)
-#         print(user)
-#         if user is not None:
-#             if user.is_active:
-#                 login(request, user)
-#
-#                 return HttpResponseRedirect('/quotes')
-#             else:
-#                 return HttpResponse("Inactive user.")
-#         else:
-#             return HttpResponseRedirect('/user/login')
-#
-#     def get(self, request):
-#         return render(request, "user/login.html")
+class LoginView(View):
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+
+                return HttpResponseRedirect('/quotes')
+            else:
+                return HttpResponse("Inactive user.")
+        else:
+            return HttpResponseRedirect('/user/login')
+
+    def get(self, request):
+        return render(request, "user/login.html")
 
 
 class LogoutView(View):
