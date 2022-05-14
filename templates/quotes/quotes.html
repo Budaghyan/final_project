@@ -1,0 +1,28 @@
+{% extends 'layout/base.html' %}
+{% block content %}
+    <section class="vh-100 bg-light">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-10 col-xl-8">
+        {% for quote in object_list %}
+          <figure class="note note-primary p-4">
+              <blockquote class="blockquote">
+                <p class="pb-2">
+                    {{ quote.text }}
+                </p>
+              </blockquote>
+              <figcaption class="blockquote-footer mb-0">
+                  {{ quote.user_id.username }}
+              </figcaption>
+            <figcaption class="blockquote-small mb-0">
+                 {% for tag in quote.tag.all %}
+                     #{{ tag.name }}
+                 {% endfor %}
+              </figcaption>
+          </figure>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

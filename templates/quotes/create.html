@@ -1,0 +1,10 @@
+{% extends 'layout/base.html' %}
+{% block content %}
+    {{ errors }}
+    <form action="/quotes/create/", method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+    <input type="submit" value="Save">
+    </form>
+{% endblock %}
