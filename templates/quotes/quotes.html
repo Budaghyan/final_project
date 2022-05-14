@@ -12,7 +12,7 @@
                 </p>
               </blockquote>
               <figcaption class="blockquote-footer mb-0">
-                  {{ quote.user_id.username }}
+                  {{ quote.user_id.first_name }} {{ quote.user_id.last_name }}
               </figcaption>
             <figcaption class="blockquote-small mb-0">
                  {% for tag in quote.tag.all %}
@@ -21,10 +21,7 @@
               </figcaption>
           </figure>
         {% endfor %}
-      </div>
-        <div>
-    </section>
-    {% if is_paginated %}
+      {% if is_paginated %}
     <div class="text-center">
         <span >
             {% if page_obj.has_previous %}
@@ -41,7 +38,8 @@
     <a class='btn btn-primary' href="{% url 'quotes:create-quotes' %}">Add new quote</a>
     </div>
     {% endif %}
-        </div>
+      </div>
     </div>
   </div>
+    </section>
 {% endblock %}

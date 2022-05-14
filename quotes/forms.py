@@ -26,6 +26,7 @@ class CreateQuoteForm(forms.ModelForm):
         self.instance.user_id = self.request.user
         super(CreateQuoteForm, self).save()
 
-class QuoteSearchForm(forms.Form):
-    category = forms.ModelChoiceField(Quotes.objects.order_by('tag'), required=False)
+
+# class QuoteSearchForm(forms.Form):
+#     category = forms.ModelChoiceField(Quotes.objects.order_by('tag'), required=False)
 
